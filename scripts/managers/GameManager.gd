@@ -115,22 +115,22 @@ func _on_new_game():
 	switch_state(GameState.OVERWORLD)
 
 func setup_overworld_scene():
-	if not overworld_root:
-		overworld_root = Node2D.new()
-		overworld_root.name = "OverworldRoot"
+	if overworld_root:
+		overworld_root.queue_free()
+
+	var overworld_scene = load("res://scenes/Overworld.tscn")
+	if overworld_scene:
+		overworld_root = overworld_scene.instantiate()
 		add_child(overworld_root)
 
-	# Clear previous children if any (restarting game)
-	for child in overworld_root.get_children():
-		child.queue_free()
-
-	# Instantiate Player
-	var player = OverworldPlayer.new()
-	overworld_root.add_child(player)
-	player.position = Vector2(400, 300) # Start center-ish
-
-	overworld_manager.setup(player)
-	overworld_manager.setup_debug_world()
+		var player = overworld_root.get_node("Player")
+		if player:
+			overworld_manager.setup(player)
+			overworld_manager.setup_debug_world()
+		else:
+			print("Error: Player node not found in Overworld scene.")
+	else:
+		print("Error: Could not load Overworld.tscn")
 
 func _on_load_game():
 	print("GameManager: Loading Game...")
