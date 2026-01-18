@@ -125,7 +125,11 @@ func setup_overworld_scene():
 
 		var player = overworld_root.get_node("Player")
 		if player:
-			overworld_manager.setup(player)
+			# Pass the overworld_root so the manager can scan for entities placed in the editor
+			overworld_manager.setup(player, overworld_root)
+
+			# Optional: Setup debug world only if no entities were found?
+			# setup_debug_world now checks this internally
 			overworld_manager.setup_debug_world()
 		else:
 			print("Error: Player node not found in Overworld scene.")

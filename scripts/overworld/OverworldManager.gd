@@ -12,20 +12,38 @@ var active_entities: Array[WorldEntity] = []
 # Range at which entities are "loaded" into the scene
 var load_distance: float = 300.0
 
-func setup(p_player: OverworldPlayer):
+func setup(p_player: OverworldPlayer, root_node: Node = null):
 	player = p_player
 	# Ensure player has reference to manager for input handling
 	if player and "manager" in player:
 		player.manager = self
-	print("Overworld Manager Initialized")
+
+	# Scan for entities if a root node is provided
+	if root_node:
+		scan_entities(root_node)
+
+	print("Overworld Manager Initialized. Active Entities: ", active_entities.size())
+
+func scan_entities(root_node: Node):
+	active_entities.clear()
+	# Recursive search or just direct children?
+	# For now, let's assume they are direct children or children of an "Entities" node
+	# But recursive is safer.
+	_recursive_find_entities(root_node)
+
+func _recursive_find_entities(node: Node):
+	if node is WorldEntity:
+		add_entity(node)
+
+	for child in node.get_children():
+		_recursive_find_entities(child)
 
 func add_entity(entity: WorldEntity):
-	active_entities.append(entity)
-	check_entity_visibility()
+	if not active_entities.has(entity):
+		active_entities.append(entity)
+		check_entity_visibility()
 
 func attempt_move_player(direction: Vector2):
-	# Deprecated: Player moves itself now via _process
-	# But we can still keep this for external control
 	if player:
 		# player.move(direction)
 		check_entity_visibility()
@@ -64,14 +82,13 @@ func check_entity_visibility():
 			entity.set_loaded(false)
 
 func setup_debug_world():
-	# Create a goblin
-	# Placing it to the right of the player (Player is at 576, 324)
-	var goblin = WorldEntity.new("goblin_1", "Goblin", Vector2(700, 324))
+	# Legacy/Manual fallback
+	if active_entities.size() == 0 and player and player.get_parent():
+		print("No entities found in scene, creating debug Goblin.")
+		var goblin = WorldEntity.new()
+		goblin.entity_id = "goblin_debug"
+		goblin.type_id = "Goblin"
+		goblin.position = Vector2(700, 324)
 
-	# Add to scene tree as sibling of player if possible
-	if player and player.get_parent():
 		player.get_parent().add_child(goblin)
 		add_entity(goblin)
-		print("Debug World Setup: Goblin added at (700, 324)")
-	else:
-		print("Error: Player parent not found, cannot add entities to scene.")

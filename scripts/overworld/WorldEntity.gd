@@ -4,9 +4,9 @@ extends Node2D
 # Represents an entity in the overworld that persists
 # This class holds the STATE of the entity.
 
-var entity_id: String
-var type_id: String # Key for GameDatabase
-# Position is handled by Node2D
+@export var entity_id: String = ""
+@export var type_id: String = "Goblin" # Default for testing
+
 var is_loaded: bool = false # Is in player vision?
 
 # Persistent stats that might differ from base (e.g., took damage previously)
@@ -14,22 +14,22 @@ var current_health: int
 var is_dead: bool = false
 var is_enemy: bool = false # Loaded from stats
 
-func _init(p_id: String = "", p_type: String = "", p_pos: Vector2 = Vector2.ZERO):
-	entity_id = p_id
-	type_id = p_type
-	position = p_pos
+func _ready():
+	# If no ID provided, generate a random one (for editor placed entities)
+	if entity_id == "":
+		entity_id = "entity_" + str(get_instance_id())
 
 	# Load base stats to init
 	var stats = GameDatabase.get_base_stats(type_id)
 	if not stats.is_empty():
-		current_health = stats["max_health"]
+		current_health = stats.get("max_health", 10)
 		is_enemy = stats.get("is_enemy", false)
 	else:
 		current_health = 1
 		is_enemy = false
 
-func _ready():
 	# Visual representation
+	# In a real game, you might use a Sprite2D and set the texture based on type_id
 	var visual = ColorRect.new()
 	visual.size = Vector2(32, 32)
 	visual.position = Vector2(-16, -16)
@@ -59,11 +59,10 @@ func serialize() -> Dictionary:
 	}
 
 static func deserialize(data: Dictionary) -> WorldEntity:
-	var entity = WorldEntity.new(
-		data["entity_id"],
-		data["type_id"],
-		Vector2(data["position_x"], data["position_y"])
-	)
+	var entity = WorldEntity.new()
+	entity.entity_id = data["entity_id"]
+	entity.type_id = data["type_id"]
+	entity.position = Vector2(data["position_x"], data["position_y"])
 	entity.current_health = data["current_health"]
 	entity.is_dead = data["is_dead"]
 	return entity
