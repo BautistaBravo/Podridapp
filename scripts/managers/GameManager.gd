@@ -207,7 +207,10 @@ func start_battle(entity_source: WorldEntity = null):
 	if entity_source:
 		enemy.current_health = entity_source.current_health
 
-	battle_manager.setup_battle(player_party, [enemy])
+	var enemies: Array[Combatant] = []
+	enemies.append(enemy)
+
+	battle_manager.setup_battle(player_party, enemies)
 
 func _on_battle_ended(result):
 	if result == BattleManager.BattleState.VICTORY:

@@ -16,7 +16,7 @@ func _ready():
 	# In a real scenario, you would populate parties here or inject them
 	pass
 
-func setup_battle(players: Array, enemies: Array):
+func setup_battle(players: Array[Combatant], enemies: Array[Combatant]):
 	player_party = players
 	enemy_party = enemies
 	exp_pool = 0
