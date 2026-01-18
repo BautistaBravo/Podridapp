@@ -65,12 +65,13 @@ func check_entity_visibility():
 
 func setup_debug_world():
 	# Create a goblin
-	var goblin = WorldEntity.new("goblin_1", "Goblin", Vector2(100, 100))
+	# Placing it to the right of the player (Player is at 576, 324)
+	var goblin = WorldEntity.new("goblin_1", "Goblin", Vector2(700, 324))
 
 	# Add to scene tree as sibling of player if possible
 	if player and player.get_parent():
 		player.get_parent().add_child(goblin)
 		add_entity(goblin)
-		print("Debug World Setup: Goblin added at (100, 100)")
+		print("Debug World Setup: Goblin added at (700, 324)")
 	else:
 		print("Error: Player parent not found, cannot add entities to scene.")
