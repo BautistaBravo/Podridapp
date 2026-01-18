@@ -84,4 +84,9 @@ grow_vertical = 0
 layout_mode = 2
 text = "Attack"
 
+[node name="FleeButton" type="Button" parent="ActionMenu"]
+layout_mode = 2
+text = "Run Away"
+
 [connection signal="pressed" from="ActionMenu/AttackButton" to="." method="on_attack_button_pressed" binds= [0]]
+[connection signal="pressed" from="ActionMenu/FleeButton" to="." method="on_flee_button_pressed"]

@@ -38,6 +38,8 @@ func _on_battle_state_changed(new_state):
 			update_status("Victory!")
 		BattleManager.BattleState.DEFEAT:
 			update_status("Defeat!")
+		BattleManager.BattleState.ESCAPED:
+			update_status("Escaped!")
 
 func generate_combatant_visuals(players: Array, enemies: Array):
 	# Clear existing
@@ -90,3 +92,7 @@ func create_combatant_panel(combatant, color: Color) -> Panel:
 func on_attack_button_pressed(target_index: int):
 	print("UI: Attack button pressed for target index ", target_index)
 	battle_manager.player_action_attack(target_index)
+
+func on_flee_button_pressed():
+	print("UI: Flee button pressed")
+	battle_manager.player_action_flee()

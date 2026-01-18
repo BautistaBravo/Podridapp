@@ -225,6 +225,13 @@ func _on_battle_ended(result):
 			active_battle_entity = null
 
 		switch_state(GameState.OVERWORLD)
+
+	elif result == BattleManager.BattleState.ESCAPED:
+		print("GameManager: Escaped Battle. Returning to Overworld.")
+		# Do NOT kill the entity. Just clear the active tracker.
+		active_battle_entity = null
+		switch_state(GameState.OVERWORLD)
+
 	else:
 		print("GameManager: Battle Lost! Game Over.")
 		# Handle game over (reload, etc.)

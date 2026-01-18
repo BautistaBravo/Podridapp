@@ -1,7 +1,7 @@
 class_name BattleManager
 extends Node
 
-enum BattleState { SETUP, PLAYER_TURN, ENEMY_TURN, VICTORY, DEFEAT }
+enum BattleState { SETUP, PLAYER_TURN, ENEMY_TURN, VICTORY, DEFEAT, ESCAPED }
 
 var current_state = BattleState.SETUP
 var player_party: Array[Combatant] = []
@@ -10,7 +10,7 @@ var exp_pool: int = 0
 
 # Signals
 signal state_changed(new_state)
-signal battle_ended(result) # result: BattleState.VICTORY or BattleState.DEFEAT
+signal battle_ended(result) # result: BattleState.VICTORY or BattleState.DEFEAT or ESCAPED
 
 func _ready():
 	# In a real scenario, you would populate parties here or inject them
@@ -129,6 +129,20 @@ func player_action_attack(target_index: int):
 			active_hero.attack(target)
 			if not check_battle_end():
 				end_turn() # End turn after action
+
+func player_action_flee():
+	if current_state != BattleState.PLAYER_TURN:
+		return
+
+	# Simple 50% chance for now, or based on agility comparison
+	var chance = 0.5
+	if randf() < chance:
+		print("Player successfully fled!")
+		change_state(BattleState.ESCAPED)
+		battle_ended.emit(BattleState.ESCAPED)
+	else:
+		print("Failed to flee!")
+		end_turn()
 
 func get_active_hero():
 	# Simplification: Just getting the first alive hero
