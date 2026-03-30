@@ -1,0 +1,99 @@
+[gd_scene load_steps=7 format=3 uid="uid://mainscene123"]
+
+[ext_resource type="Script" path="res://scripts/managers/GameManager.gd" id="1_manager"]
+[ext_resource type="Script" path="res://scripts/overworld/OverworldManager.gd" id="2_overworld"]
+[ext_resource type="Script" path="res://scripts/managers/BattleManager.gd" id="3_battle"]
+[ext_resource type="Script" path="res://scripts/ui/MainMenu.gd" id="4_menu"]
+[ext_resource type="Script" path="res://scripts/ui/OptionsMenu.gd" id="5_options"]
+[ext_resource type="PackedScene" uid="uid://battleui456" path="res://scenes/BattleUI.tscn" id="6_ui"]
+
+[node name="Game" type="Node" node_paths=PackedStringArray("overworld_manager", "battle_manager", "battle_ui", "main_menu", "options_menu")]
+script = ExtResource("1_manager")
+overworld_manager = NodePath("OverworldManager")
+battle_manager = NodePath("BattleManager")
+battle_ui = NodePath("CanvasLayer/BattleUI")
+main_menu = NodePath("CanvasLayer/MainMenu")
+options_menu = NodePath("CanvasLayer/OptionsMenu")
+
+[node name="OverworldManager" type="Node" parent="."]
+script = ExtResource("2_overworld")
+
+[node name="BattleManager" type="Node" parent="."]
+script = ExtResource("3_battle")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="BattleUI" parent="CanvasLayer" instance=ExtResource("6_ui")]
+
+[node name="MainMenu" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_menu")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/VBoxContainer"]
+layout_mode = 2
+text = "JRPG PROTOTYPE"
+
+[node name="NewGameButton" type="Button" parent="CanvasLayer/MainMenu/VBoxContainer"]
+layout_mode = 2
+text = "New Game"
+
+[node name="LoadGameButton" type="Button" parent="CanvasLayer/MainMenu/VBoxContainer"]
+layout_mode = 2
+text = "Load Game"
+
+[node name="OptionsButton" type="Button" parent="CanvasLayer/MainMenu/VBoxContainer"]
+layout_mode = 2
+text = "Options"
+
+[node name="OptionsMenu" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_options")
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/OptionsMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/OptionsMenu/CenterContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/OptionsMenu/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "OPTIONS"
+
+[node name="BackButton" type="Button" parent="CanvasLayer/OptionsMenu/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Back"
+
+[connection signal="pressed" from="CanvasLayer/MainMenu/VBoxContainer/NewGameButton" to="CanvasLayer/MainMenu" method="on_new_game_pressed"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/VBoxContainer/LoadGameButton" to="CanvasLayer/MainMenu" method="on_load_game_pressed"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/VBoxContainer/OptionsButton" to="CanvasLayer/MainMenu" method="on_options_pressed"]
+[connection signal="pressed" from="CanvasLayer/OptionsMenu/CenterContainer/VBoxContainer/BackButton" to="CanvasLayer/OptionsMenu" method="on_back_pressed"]

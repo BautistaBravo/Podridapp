@@ -1,0 +1,92 @@
+[gd_scene load_steps=2 format=3 uid="uid://battleui456"]
+
+[ext_resource type="Script" path="res://scripts/managers/BattleUI.gd" id="1_battleui"]
+
+[node name="BattleUI" type="Control" node_paths=PackedStringArray("status_label", "action_menu", "player_container", "enemy_container")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_battleui")
+status_label = NodePath("Panel/StatusLabel")
+action_menu = NodePath("ActionMenu")
+player_container = NodePath("PlayerContainer")
+enemy_container = NodePath("EnemyContainer")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 80.0
+grow_horizontal = 2
+
+[node name="StatusLabel" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Waiting..."
+horizontal_alignment = 1
+
+[node name="PlayerContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 100.0
+offset_top = -100.0
+offset_right = 300.0
+offset_bottom = 100.0
+grow_vertical = 2
+alignment = 1
+
+[node name="EnemyContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -100.0
+offset_right = -100.0
+offset_bottom = 100.0
+grow_horizontal = 0
+grow_vertical = 2
+alignment = 1
+
+[node name="ActionMenu" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -150.0
+offset_right = -50.0
+offset_bottom = -50.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="AttackButton" type="Button" parent="ActionMenu"]
+layout_mode = 2
+text = "Attack"
+
+[node name="FleeButton" type="Button" parent="ActionMenu"]
+layout_mode = 2
+text = "Run Away"
+
+[connection signal="pressed" from="ActionMenu/AttackButton" to="." method="on_attack_button_pressed" binds= [0]]
+[connection signal="pressed" from="ActionMenu/FleeButton" to="." method="on_flee_button_pressed"]
